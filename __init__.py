@@ -20,6 +20,7 @@ from aqt import mw
 # import all of the Qt GUI library
 from aqt.qt import *
 
+from anki.cards import Card
 from aqt.utils import askUser, tooltip
 from anki.hooks import addHook
 
@@ -40,8 +41,6 @@ def onDeckBrowserDelayCards(did):
     if not r:
         return
     delay_cards(did)
-
-    tooltip("Delayed deck by: %d days" % max_days_due)
 
 
 def delay_cards(did):
@@ -67,6 +66,8 @@ def delay_cards(did):
     mw.col.decks.save(deck)
     mw.col.decks.flush()
     mw.deckBrowser.refresh()
+    tooltip("Delayed deck by: %d days" % max_days_due)
+
 
 def onDeckBrowserShowOptions(menu, did):
     a = menu.addAction("Delay Overdue")
