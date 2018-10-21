@@ -1,4 +1,7 @@
-Anki add-on that delays all cards by the number of days the deck is overdue
+An anki add-on that delays all cards by the number of days the deck is overdue.
+
+FOR EXAMPLE:
+If you have not studied for 2 weeks, it will delay all cards by 14 days - essentially making it as though you never missed a day.
 
 # Usage
 Click on the gear icon for the specific deck you want to delay. Choose delay option in the menu.
