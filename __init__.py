@@ -52,13 +52,14 @@ def delay_cards(did):
     cards = [Card(mw.col, cid) for cid in deckManager.cids(did)]
     max_days_due = 0
     DUE = 2
+    SUSPENDED = -1
     for card in cards:
-        if card.type == DUE and card.due <= difference:
+        if card.type == DUE and card.queue != SUSPENDED and card.due <= difference:
             days_due = difference - card.due
             if days_due > max_days_due:
                 max_days_due = days_due
     for card in cards:
-        if card.type == DUE:
+        if card.type == DUE and card.queue != SUSPENDED:
             adjusted_due_date = card.due + max_days_due
             card.due = adjusted_due_date
             card.flush()
