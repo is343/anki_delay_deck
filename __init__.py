@@ -37,28 +37,22 @@ def onDeckBrowserDelayCards(did):
     if not cids:
         tooltip("Deck contains no cards.")
         return
-    ask_response = askUser("This will delay <b>ALL</b> cards in the deck"
-                " '{}' by the number of days the deck is overdue."
-                "<br><br>Are you sure you want to proceed?".format(deck_name),
-                defaultno=True, title="Delay Overdue Cards")
-    if not ask_response:
-        return
 
     deckManager = mw.col.decks
     cards = [Card(mw.col, cid) for cid in deckManager.cids(did)]
 
     days_to_delay = calculate_delay(did, cards)
 
-    confirm_response = askUser("The oldest card is <b>{}</b> days overdue."
-                " Delay all cards by {} days?"
+    confirm_response = askUser("The oldest card is {0} days overdue."
+                " Delay all cards by {0} days?"
                 "<br><br>If you press 'NO' you will be able to manually enter"
-                " how many days to delay by.".format(days_to_delay, days_to_delay),
+                " how many days to delay by.".format(days_to_delay),
                 defaultno=True, title="Confirm Delay")
                 
     if not confirm_response:
         days_to_delay = getOnlyText("How many days would you like to delay? (Negative numbers will bring days forward)")
 
-        if days_to_delay is "":
+        if not days_to_delay:
             return
         try:
             days_to_delay = int(days_to_delay)
@@ -95,7 +89,16 @@ def delay_cards(did, deckManager, cards, days_to_delay):
     mw.col.decks.save(deck)
     mw.col.decks.flush()
     mw.deckBrowser.refresh()
-    tooltip("Delayed deck by: %d days" % days_to_delay)
+
+    main_text = "Delayed deck by:"
+    days_text = "days"
+
+    if days_to_delay < 0:
+        main_text = "Deck brought forward by:"
+    if days_to_delay == 1 | days_to_delay == -1:
+        days_text = "day"
+    
+    tooltip("{0} {1} {2}".format(main_text, days_to_delay, days_text))
 
 
 def onDeckBrowserShowOptions(menu, did):
