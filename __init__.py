@@ -2,6 +2,7 @@
 #  Ivan Schurawel
 # October 21, 2018
 # January 22, 2019
+# August 9, 2020
 
 """
 This program is free software: you can redistribute it and/or modify
@@ -45,7 +46,7 @@ def onDeckBrowserDelayCards(did):
 
     confirm_response = askUser("The oldest card is {0} days overdue."
                 " Delay all cards by {0} days?"
-                "<br><br>If you press 'NO' you will be able to manually enter"
+                "<br><br>If you press 'No' you will be able to manually enter"
                 " how many days to delay by.".format(days_to_delay),
                 defaultno=True, title="Confirm Delay")
                 
@@ -60,7 +61,7 @@ def onDeckBrowserDelayCards(did):
                 raise ValueError('Not a valid int')
                 return
         except:
-                showWarning("Please only enter interger numbers")
+                showWarning("Please only enter whole numbers")
                 return
 
     delay_cards(did, deckManager, cards, days_to_delay)
@@ -93,10 +94,11 @@ def delay_cards(did, deckManager, cards, days_to_delay):
     main_text = "Delayed deck by:"
     days_text = "days"
 
-    if days_to_delay < 0:
-        main_text = "Deck brought forward by:"
     if days_to_delay == 1 | days_to_delay == -1:
         days_text = "day"
+    if days_to_delay < 0:
+        main_text = "Deck brought forward by:"
+        days_to_delay *= -1
     
     tooltip("{0} {1} {2}".format(main_text, days_to_delay, days_text))
 
