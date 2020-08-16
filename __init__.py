@@ -11,12 +11,10 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
-
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
@@ -45,13 +43,17 @@ def onDeckBrowserDelayCards(did):
     cards = [Card(mw.col, cid) for cid in cids]
 
     days_to_delay = calculate_delay(did, cards)
+    days_text = "days"
 
-    confirm_response = askUser("The oldest card is {0} days overdue."
-                " Delay all cards by {0} days?"
-                "<br><br>If you press 'No' you will be able to manually enter"
-                " how many days to delay by.".format(days_to_delay),
-                defaultno=True, title="Confirm Delay")
-                
+    if days_to_delay == 1:
+        days_text = "day"
+
+    confirm_response = askUser("The oldest card is {0} {1} overdue."
+                               " Delay all cards by {0} {1}?"
+                               "<br><br>If you press 'No' you will be able to manually enter"
+                               " how many days to delay by.".format(days_to_delay, days_text),
+                               defaultno=True, title="Confirm Delay")
+
     if not confirm_response:
         days_to_delay = getOnlyText("How many days would you like to delay? (Negative numbers will bring days forward)")
 
@@ -63,10 +65,11 @@ def onDeckBrowserDelayCards(did):
                 raise ValueError('Not a valid int')
                 return
         except:
-                showWarning("Please only enter whole numbers")
-                return
+            showWarning("Please only enter whole numbers")
+            return
 
     delay_cards(did, deckManager, cards, days_to_delay)
+
 
 def calculate_delay(did, cards):
     today_date = datetime.date.today()
@@ -81,6 +84,7 @@ def calculate_delay(did, cards):
                 max_days_due = days_due
 
     return max_days_due
+
 
 def delay_cards(did, deckManager, cards, days_to_delay):
     for card in cards:
@@ -101,7 +105,7 @@ def delay_cards(did, deckManager, cards, days_to_delay):
     if days_to_delay < 0:
         main_text = "Deck brought forward by:"
         days_to_delay *= -1
-    
+
     tooltip("{0} {1} {2}".format(main_text, days_to_delay, days_text))
 
 
