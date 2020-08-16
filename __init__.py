@@ -3,6 +3,7 @@
 # October 21, 2018
 # January 22, 2019
 # August 9, 2020
+# August 16, 2020
 
 """
 This program is free software: you can redistribute it and/or modify
@@ -32,15 +33,15 @@ import datetime
 DUE = 2
 SUSPENDED = -1
 
+
 def onDeckBrowserDelayCards(did):
-    deck_name = mw.col.decks.name(did)
-    cids = mw.col.decks.cids(did, children=True)
+    deckManager = mw.col.decks
+    deck_name = deckManager.name(did)
+    cids = deckManager.cids(did, children=True)
     if not cids:
         tooltip("Deck contains no cards.")
         return
-
-    deckManager = mw.col.decks
-    cards = [Card(mw.col, cid) for cid in deckManager.cids(did)]
+    cards = [Card(mw.col, cid) for cid in cids]
 
     days_to_delay = calculate_delay(did, cards)
 
