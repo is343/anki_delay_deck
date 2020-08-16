@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-#  Ivan Schurawel
+# Ivan Schurawel
+# https://github.com/is343
 # October 21, 2018
 # January 22, 2019
 # August 9, 2020
