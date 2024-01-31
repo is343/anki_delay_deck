@@ -5,6 +5,7 @@
 # January 22, 2019
 # August 9, 2020
 # August 16, 2020
+# January 30, 2024
 
 """
 This program is free software: you can redistribute it and/or modify
@@ -25,6 +26,7 @@ from aqt.qt import *
 from anki.cards import Card
 from aqt.utils import askUser, getOnlyText, showWarning, tooltip
 from anki.hooks import addHook
+from anki.utils import pointVersion
 
 import time
 import datetime
@@ -32,6 +34,7 @@ import datetime
 DUE = 2
 SUSPENDED = -1
 
+IS_AT_LEAST_VERSION_23 = pointVersion() >= 231000
 
 def onDeckBrowserDelayCards(did):
     deckManager = mw.col.decks
@@ -91,10 +94,12 @@ def delay_cards(did, deckManager, cards, days_to_delay):
         if card.type == DUE:
             adjusted_due_date = card.due + days_to_delay
             card.due = adjusted_due_date
-            card.flush()
+            if IS_AT_LEAST_VERSION_23:
+                mw.col.update_card(card)
+            else: # older versions
+                card.flush()
     deck = deckManager.get(did)
     mw.col.decks.save(deck)
-    mw.col.decks.flush()
     mw.deckBrowser.refresh()
 
     main_text = "Delayed deck by:"
